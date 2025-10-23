@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { Loader } from "lucide-react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+
 import type { AuthState } from "../../types/Auth";
 import { toast } from "sonner";
 import { handleApiError } from "../../helpers/handleApiErrror";
 import { useAuthStore } from "../../store/useAuthStore";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const intialState = {
   email: "pedro.dominguez@gmail.com",
   password: "password123",
 };
 
-export const LoginPage = () => {
+export default function LoginPage () {
   const [form, setForm] = useState<AuthState>(intialState);
   const { checkingAuthentication, user, status, error } = useAuthStore(
     (state) => state
