@@ -32,6 +32,7 @@ export const ProductsTable = () => {
   // Instancia del servicio de productos
   const productService = ProductService.getInstance();
 
+  // Cuando cambie los valores de row per page and
   const handleChangeControl = (updates: Partial<QueryStateI>) => {
     setQuery((prev) => ({
       ...prev,
@@ -62,8 +63,6 @@ export const ProductsTable = () => {
   useEffect(() => {
     fetchProducs();
   }, [query]);
-
-  console.log({ paginationData });
 
   return (
     <div className="p-4">
