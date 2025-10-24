@@ -14,7 +14,9 @@ import { ProductService } from "@/services/ProductServices/ProductService";
 import type {
   ProductDataI,
   ProductI,
+  ResponseI,
 } from "@/services/ProductServices/ProductServiceInterface";
+import { RowSpanMessage } from "./RowSpanMessage";
 export const ProductsTable = () => {
   const [query, setQuery] = useState<QueryStateI>({
     search: "",
@@ -28,6 +30,7 @@ export const ProductsTable = () => {
   );
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Instancia del servicio de productos
   const productService = ProductService.getInstance();
@@ -43,21 +46,19 @@ export const ProductsTable = () => {
 
   const fetchProducs = async () => {
     setIsLoading(true);
-    try {
-      const response = await productService.getProducts(query);
-      if (response.status) {
-        setProducts(response.data.data);
+    setError(null);
 
-        setPaginationData(response.data);
-        return;
-      }
+    const response = await productService.getProducts(query);
+    if (response.status) {
+      setProducts(response.data.data);
+      setPaginationData(response.data);
+    } else {
       setProducts([]);
       setPaginationData(null);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+      setError(response.message);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -78,21 +79,34 @@ export const ProductsTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading ? (
-            <TableRow>
-              <TableCell colSpan={4} className="text-center">
-                Cargando los productos...
-              </TableCell>
-            </TableRow>
-          ) : (
-            products.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell className="font-medium">{product.id}</TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.price}</TableCell>
-                <TableCell>{product.description}</TableCell>
-              </TableRow>
-            ))
+          {error && (
+            <RowSpanMessage className="text-center text-red-500">
+              {error}
+            </RowSpanMessage>
+          )}
+          {isLoading && (
+            <RowSpanMessage className="text-center">
+              Cargando resultados ...
+            </RowSpanMessage>
+          )}
+
+          {!error && !isLoading && products.length > 0 && (
+            <>
+              {products.map((product) => (
+                <TableRow key={product.id}>
+                  <TableCell className="font-medium">{product.id}</TableCell>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{product.price}</TableCell>
+                  <TableCell>{product.description}</TableCell>
+                </TableRow>
+              ))}
+            </>
+          )}
+
+          {!error && !isLoading && products.length === 0 && (
+            <RowSpanMessage className="text-center">
+              No se encontraron productos
+            </RowSpanMessage>
           )}
         </TableBody>
       </Table>

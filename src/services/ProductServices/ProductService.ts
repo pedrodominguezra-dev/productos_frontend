@@ -11,8 +11,7 @@ export class ProductService {
     return ProductService.instance;
   }
 
-  public async getProducts(query : QueryStateI) : Promise<getProductsResponseT> {
-    console.log(query);
+  public async getProducts(query : QueryStateI) : Promise<getProductsResponseT> {   
     try {
         const { data } = await apiClient.get<GetProductsSuccess>('/products',{ params : query});
 
@@ -28,8 +27,7 @@ export class ProductService {
             message?: string;
           }
         ).message ?? 'Existe un error en la conexión',
-        data : []
-      }
+      } as ResponseI
     }
   }
 }

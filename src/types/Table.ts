@@ -24,3 +24,9 @@ export interface PaginationProps extends OnChangeControl{
   paginationData : DataTableI,
   query : QueryStateI
 }
+
+export interface RowSpanMessageProps {
+  children : React.ReactNode,
+  className ?: string
+
+}

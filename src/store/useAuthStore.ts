@@ -14,8 +14,7 @@ export const useAuthStore = create<AuthStateStore>((set) => ({
       const { data } = await apiClient.post("/login", {
         email,
         password,
-      });
-      console.log(data);
+      });      
       localStorage.setItem("token", data.data.token);
       set({ status: "authenticated", user: data.data.user, error: null });
     } catch (error) {
@@ -27,7 +26,6 @@ export const useAuthStore = create<AuthStateStore>((set) => ({
 
   checkAuthToken: async () => {
     const token = localStorage.getItem("token");
-    console.log({ token });
     if (!token) {
       set({ status: "not-authenticated", user: null });
       return;
@@ -45,7 +43,6 @@ export const useAuthStore = create<AuthStateStore>((set) => ({
   },
 
   logout: () => {
-    console.log("logout llamado");
     localStorage.removeItem("token");
     set({ status: "not-authenticated", user: null });
   },

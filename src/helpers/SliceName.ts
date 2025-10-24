@@ -1,4 +1,4 @@
-export const sliceName = (value: string | null) => {
+export const sliceName = (value: string | undefined) => {
   if (!value) return;
 
   return value

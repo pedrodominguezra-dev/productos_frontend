@@ -20,7 +20,7 @@ export const PaginationTable = ({
   return (
     <>
     <Separator />
-    <Pagination className="mt-3">
+    <Pagination className="mt-5">
       <PaginationContent>
         {paginationData?.links.map((link, i) => (
           <PaginationItem key={i}>
