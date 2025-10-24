@@ -1,15 +1,26 @@
+import type { DataTableI } from "@/services/ProductServices/ProductServiceInterface";
+
 export interface QueryStateI {
   search: string;
-  per_page: number;
+  perPage: number;
   page: number;
 }
 
-export interface ControlTableProps {
+interface OnChangeControl {
+  onChange : (updates: Partial<QueryStateI>) => void;
+}
+export interface ControlTableProps extends OnChangeControl {
   query: QueryStateI;
-  onChange: (updates: Partial<QueryStateI>) => void;
 }
 
-export interface RowPerPageProps {
+
+
+export interface RowPerPageProps extends OnChangeControl {
   perPage: number;
-  onChange: (updates: Partial<QueryStateI>) => void;
+}
+
+
+export interface PaginationProps extends OnChangeControl{
+  paginationData : DataTableI,
+  query : QueryStateI
 }

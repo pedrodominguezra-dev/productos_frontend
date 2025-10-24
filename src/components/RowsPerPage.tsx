@@ -19,7 +19,7 @@ export const RowsPerPage = ({perPage, onChange} : RowPerPageProps) => {
       </Label>
       <Select 
         value={`${perPage}`}  
-        onValueChange={(value: string) => onChange({per_page : Number(value)})}
+        onValueChange={(value: string) => onChange({perPage : Number(value)})}
       >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder={`10`} />
@@ -27,7 +27,7 @@ export const RowsPerPage = ({perPage, onChange} : RowPerPageProps) => {
         <SelectContent>
           <SelectGroup>
             {rowsCount.map((row : number) => (
-              <SelectItem value={`${row}`}>{row}</SelectItem>
+              <SelectItem key={row} value={`${row}`}>{row}</SelectItem>
             ))}
             
           </SelectGroup>

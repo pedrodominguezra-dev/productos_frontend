@@ -15,9 +15,9 @@ export const useAuthStore = create<AuthStateStore>((set) => ({
         email,
         password,
       });
-      
-      localStorage.setItem("token", data.token);
-      set({ status: "authenticated", user: data.user, error: null });
+      console.log(data);
+      localStorage.setItem("token", data.data.token);
+      set({ status: "authenticated", user: data.data.user, error: null });
     } catch (error) {
       console.error(error);
       localStorage.removeItem("token");
@@ -35,8 +35,8 @@ export const useAuthStore = create<AuthStateStore>((set) => ({
     set({ status: "checking" });    
     try {
       const { data } = await apiClient.get("/user");
-      localStorage.setItem("token", data.token);
-      set({ status: "authenticated", user: data.user, error: null });
+      localStorage.setItem("token", data.data.token);
+      set({ status: "authenticated", user: data.data.user, error: null });
     } catch (error) {
       console.error(error);
       localStorage.removeItem("token");

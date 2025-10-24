@@ -7,15 +7,30 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { QueryStateI } from "@/types/Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ControlTable } from "./ControlTable";
 import { PaginationTable } from "./PaginationTable";
+import { ProductService } from "@/services/ProductServices/ProductService";
+import type {
+  ProductDataI,
+  ProductI,
+} from "@/services/ProductServices/ProductServiceInterface";
 export const ProductsTable = () => {
   const [query, setQuery] = useState<QueryStateI>({
     search: "",
-    per_page: 10,
+    perPage: 10,
     page: 1,
   });
+
+  const [products, setProducts] = useState<ProductI[]>([]);
+  const [paginationData, setPaginationData] = useState<ProductDataI | null>(
+    null
+  );
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Instancia del servicio de productos
+  const productService = ProductService.getInstance();
 
   const handleChangeControl = (updates: Partial<QueryStateI>) => {
     setQuery((prev) => ({
@@ -25,33 +40,70 @@ export const ProductsTable = () => {
     }));
   };
 
+  const fetchProducs = async () => {
+    setIsLoading(true);
+    try {
+      const response = await productService.getProducts(query);
+      if (response.status) {
+        setProducts(response.data.data);
+
+        setPaginationData(response.data);
+        return;
+      }
+      setProducts([]);
+      setPaginationData(null);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducs();
+  }, [query]);
+
+  console.log({ paginationData });
+
   return (
     <div className="p-4">
-      <ControlTable 
-        query={query}
-        onChange={handleChangeControl}      
-      />
+      <ControlTable query={query} onChange={handleChangeControl} />
 
       <Table className="mt-4">
         <TableHeader>
           <TableRow className="bg-gray-100 rounded">
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="w-[100px]">Id</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Description</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>Paid</TableCell>
-            <TableCell>Credit Card</TableCell>
-            <TableCell className="text-right">$250.00</TableCell>
-          </TableRow>
+          {isLoading ? (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center">
+                Cargando los productos...
+              </TableCell>
+            </TableRow>
+          ) : (
+            products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell className="font-medium">{product.id}</TableCell>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.price}</TableCell>
+                <TableCell>{product.description}</TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
-
-      <PaginationTable />
+      {paginationData && !isLoading && (
+        <PaginationTable
+          paginationData={paginationData}
+          query={query}
+          onChange={handleChangeControl}
+        />
+      )}
     </div>
   );
 };
