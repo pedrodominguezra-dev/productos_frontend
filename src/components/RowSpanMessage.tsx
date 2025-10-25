@@ -1,4 +1,3 @@
-import React from "react";
 import { TableCell, TableRow } from "./ui/table";
 import type { RowSpanMessageProps } from "@/types/Table";
 

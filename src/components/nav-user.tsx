@@ -1,9 +1,6 @@
 import {
-  IconCreditCard,
   IconDotsVertical,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
+  IconLogout
 } from "@tabler/icons-react"
 
 import {
@@ -14,7 +11,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,

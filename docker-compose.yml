@@ -1,0 +1,18 @@
+services:
+  # Servicio para construir la aplicación de React y ejecutarla con Nginx
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: products
+    
+    volumes:
+      # Monta el archivo de configuración de Nginx.      
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped # Asegura que el contenedor se reinicie si falla o al reiniciar el Docker daemon
+    networks:
+      - products
+# Define las redes para los servicios
+networks:
+  products:
+    driver: bridge

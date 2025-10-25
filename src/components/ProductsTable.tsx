@@ -11,10 +11,10 @@ import { useEffect, useState } from "react";
 import { ControlTable } from "./ControlTable";
 import { PaginationTable } from "./PaginationTable";
 import { ProductService } from "@/services/ProductServices/ProductService";
-import type {
-  ProductDataI,
-  ProductI,
-  ResponseI,
+import {
+  isGetProductsSuccess,
+  type ProductDataI,
+  type ProductI,
 } from "@/services/ProductServices/ProductServiceInterface";
 import { RowSpanMessage } from "./RowSpanMessage";
 export const ProductsTable = () => {
@@ -44,14 +44,15 @@ export const ProductsTable = () => {
     }));
   };
 
+  
   const fetchProducs = async () => {
     setIsLoading(true);
     setError(null);
 
     const response = await productService.getProducts(query);
-    if (response.status) {
-      setProducts(response.data.data);
-      setPaginationData(response.data);
+    if (isGetProductsSuccess(response)) {
+      setProducts(response.data);
+      setPaginationData(response);
     } else {
       setProducts([]);
       setPaginationData(null);
