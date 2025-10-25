@@ -16,7 +16,7 @@ const intialState = {
 
 export default function LoginPage () {
   const [form, setForm] = useState<AuthState>(intialState);
-  const { checkingAuthentication, user, status, error } = useAuthStore(
+  const { checkingAuthentication, status, error } = useAuthStore(
     (state) => state
   );
 
@@ -27,7 +27,6 @@ export default function LoginPage () {
     });
   };
 
-  console.log({ user });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

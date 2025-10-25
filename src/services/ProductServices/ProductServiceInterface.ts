@@ -28,24 +28,34 @@ export interface DataTableI {
   total: number;
 }
 
-export interface ResponseI {
+// Respuesta de error
+export interface ErrorResponseI {
   message: string;
-  status: boolean;
+  status: false;
 }
 
+// Respuesta exitosa - data es obligatorio
+export interface SuccessResponseI<T = unknown> {
+  message: string;
+  status: true;
+  data: T; // Cambiado de opcional a obligatorio
+}
+
+// Para productos con paginación
 export interface ProductDataI extends DataTableI {
   data: ProductI[];
 }
 
-export interface GetProductsSuccess extends ProductDataI {
-  message: string;
-  status: true;
-}
+export interface GetProductsSuccess extends SuccessResponseI<ProductDataI> {}
 
-export type getProductsResponseT = GetProductsSuccess | ResponseI;
-
+// Tipo unión para la respuesta
+export type GetProductsResponseT = GetProductsSuccess | ErrorResponseI;
 export function isGetProductsSuccess(
-  res: getProductsResponseT
+  res: GetProductsResponseT
 ): res is GetProductsSuccess {
-  return (res as GetProductsSuccess).data !== undefined;
+  return res.status === true && 
+         'data' in res && 
+         res.data !== undefined && 
+         'data' in res.data && 
+         Array.isArray(res.data.data);
 }

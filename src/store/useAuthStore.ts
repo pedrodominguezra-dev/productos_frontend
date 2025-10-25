@@ -15,6 +15,7 @@ export const useAuthStore = create<AuthStateStore>((set) => ({
         email,
         password,
       });      
+      console.log(data.data.token);
       localStorage.setItem("token", data.data.token);
       set({ status: "authenticated", user: data.data.user, error: null });
     } catch (error) {

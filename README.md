@@ -10,13 +10,16 @@ npm install
 ```
 
 ### Contruir el proyecto
+Para ello se debe ejecutar un contenedor para correr la aplicación, este comando es el siguiente:
 ```
-npm run build
+docker compose up --build --force-recreate
 ```
 
-### Ejecutar la versión del proyecto compilado
+
+### Visualizar el proyecto construido
+Para visualizar el proyecto construido en el contenedor basta con consultar la siguiente URL
 ```
-npm run preview
+http://localhost:3000/
 ```
 
 Nota : Las crendeciales para acceder al sistema se encuentran ya incrustadas en el código

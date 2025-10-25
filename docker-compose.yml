@@ -4,15 +4,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: products
+    container_name: products-web
     
     volumes:
       # Monta el archivo de configuración de Nginx.      
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     restart: unless-stopped # Asegura que el contenedor se reinicie si falla o al reiniciar el Docker daemon
+    ports:
+      - "3000:80"
     networks:
-      - products
+      - products-network
 # Define las redes para los servicios
 networks:
-  products:
+  products-network:
     driver: bridge

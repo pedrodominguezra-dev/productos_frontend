@@ -44,15 +44,15 @@ export const ProductsTable = () => {
     }));
   };
 
-  
   const fetchProducs = async () => {
     setIsLoading(true);
     setError(null);
 
     const response = await productService.getProducts(query);
+
     if (isGetProductsSuccess(response)) {
-      setProducts(response.data);
-      setPaginationData(response);
+      setProducts(response.data.data); 
+      setPaginationData(response.data); 
     } else {
       setProducts([]);
       setPaginationData(null);
@@ -65,6 +65,7 @@ export const ProductsTable = () => {
   useEffect(() => {
     fetchProducs();
   }, [query]);
+
 
   return (
     <div className="p-4">
@@ -91,7 +92,7 @@ export const ProductsTable = () => {
             </RowSpanMessage>
           )}
 
-          {!error && !isLoading && products.length > 0 && (
+          {!error && !isLoading && products && products.length > 0 && (
             <>
               {products.map((product) => (
                 <TableRow key={product.id}>

@@ -11,7 +11,6 @@ const ProductsPage = lazy(() => import ('../pages/products/ProductsPage'));
 
 export const AppRoute = () => {
   const { checkAuthToken, status } = useAuthStore();
-
   useEffect(() => {
     checkAuthToken();
   }, []);
