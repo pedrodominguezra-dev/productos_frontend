@@ -10,7 +10,7 @@ npm install
 ```
 
 ### Contruir el proyecto
-Para ello se debe ejecutar un contenedor para correr la aplicación, este comando es el siguiente:
+Para ello se debe ejecutar un contenedor para correr la aplicación, el comando a ejecutar es el siguiente:
 ```
 docker compose up --build --force-recreate
 ```
