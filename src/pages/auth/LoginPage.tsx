@@ -3,7 +3,6 @@ import { Loader } from "lucide-react";
 
 import type { AuthState } from "../../types/Auth";
 import { toast } from "sonner";
-import { handleApiError } from "../../helpers/handleApiErrror";
 import { useAuthStore } from "../../store/useAuthStore";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -14,7 +13,7 @@ const intialState = {
   password: "password123",
 };
 
-export default function LoginPage () {
+export default function LoginPage() {
   const [form, setForm] = useState<AuthState>(intialState);
   const { checkingAuthentication, status, error } = useAuthStore(
     (state) => state
@@ -27,7 +26,6 @@ export default function LoginPage () {
     });
   };
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     checkingAuthentication({
@@ -37,8 +35,7 @@ export default function LoginPage () {
   };
 
   if (error) {
-    const message = handleApiError(error);
-    toast.error(message);
+    toast.error(error);
   }
 
   const { email, password } = form;
@@ -93,4 +90,4 @@ export default function LoginPage () {
       </section>
     </div>
   );
-};
+}

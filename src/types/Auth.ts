@@ -12,7 +12,7 @@ export interface User {
 export interface AuthStateStore {
   status: AuthStatus;
   user: User | null;
-  error: any;
+  error: string | null;
   checkingAuthentication: (credentials: {
     email: string;
     password: string;

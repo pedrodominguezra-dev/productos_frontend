@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import type { AuthStateStore } from "../types/Auth";
 import apiClient from "../api/apiProducts";
+import { handleApiError } from "@/helpers/handleApiErrror";
+import { AxiosError } from "axios";
 
 //  Creación del store
 export const useAuthStore = create<AuthStateStore>((set) => ({
@@ -14,14 +16,18 @@ export const useAuthStore = create<AuthStateStore>((set) => ({
       const { data } = await apiClient.post("/login", {
         email,
         password,
-      });      
-      console.log(data.data.token);
+      });
       localStorage.setItem("token", data.data.token);
       set({ status: "authenticated", user: data.data.user, error: null });
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      let message =
+        "Ha sucedido un error inesprado al verificar las credenciales";
+      if (error instanceof AxiosError) {
+        message = handleApiError(error);
+      }
+
       localStorage.removeItem("token");
-      set({ status: "not-authenticated", user: null, error });
+      set({ status: "not-authenticated", user: null, error: message });
     }
   },
 
@@ -31,15 +37,18 @@ export const useAuthStore = create<AuthStateStore>((set) => ({
       set({ status: "not-authenticated", user: null });
       return;
     }
-    set({ status: "checking" });    
+    set({ status: "checking" });
     try {
       const { data } = await apiClient.get("/user");
       localStorage.setItem("token", data.data.token);
       set({ status: "authenticated", user: data.data.user, error: null });
     } catch (error) {
-      console.error(error);
+      let message = "Ha sucedido un error inesperado al comprobar la sesión";
+      if (error instanceof AxiosError) {
+        message = handleApiError(error);
+      }
       localStorage.removeItem("token");
-      set({ status: "not-authenticated", user: null, error });
+      set({ status: "not-authenticated", user: null, error: message });
     }
   },
 

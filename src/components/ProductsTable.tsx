@@ -49,7 +49,7 @@ export const ProductsTable = () => {
     setError(null);
 
     const response = await productService.getProducts(query);
-
+    
     if (isGetProductsSuccess(response)) {
       setProducts(response.data.data); 
       setPaginationData(response.data); 

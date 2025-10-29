@@ -46,16 +46,18 @@ export interface ProductDataI extends DataTableI {
   data: ProductI[];
 }
 
-export interface GetProductsSuccess extends SuccessResponseI<ProductDataI> {}
+export type GetProductsSuccess = SuccessResponseI<ProductDataI>;
 
 // Tipo unión para la respuesta
 export type GetProductsResponseT = GetProductsSuccess | ErrorResponseI;
 export function isGetProductsSuccess(
   res: GetProductsResponseT
 ): res is GetProductsSuccess {
-  return res.status === true && 
-         'data' in res && 
-         res.data !== undefined && 
-         'data' in res.data && 
-         Array.isArray(res.data.data);
+  return (
+    res.status === true &&
+    "data" in res &&
+    res.data !== undefined &&
+    "data" in res.data &&
+    Array.isArray(res.data.data)
+  );
 }

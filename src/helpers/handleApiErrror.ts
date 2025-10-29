@@ -1,35 +1,36 @@
-type SetErrorFn = (field: string, error: { type: string; message: string }) => void
+import type { ApiErrorResponse } from "@/types/Axios";
+import type { AxiosError } from "axios";
 
-// Manejo de errores que devuelve el API de laravel con request
-export function handleApiError(err: any, setError?: SetErrorFn): string {
-  const res = err.response || {}
-  const status = res.status
-  const data = res.data || {}
+export function handleApiError(err: AxiosError<ApiErrorResponse>): string {
+  const status = err.response?.status;
+  const data = err.response?.data;
 
-  
-  // Mensaje general
-  const message =
-    status === 401 ?
-    data?.error || 'No autenticado, por favor inicia sesión.' 
-    :
-    status === 403 ?
-    data?.message?.message || 'Acceso restringido, no tienes permisos para realizar esta acción.'
-    :
-    status === 422
-      ? data?.message?.message || 'Existen errores en la información'
-      : status === 500
-        ? data?.message?.error || 'Ha sucedido un error al registrar la información'
-        : data?.message?.message || 'Ha sucedido un error al registrar la información'
+  let message = "Ha sucedido un error al registrar la información.";
 
-  // Errores de campo individuales
-  if (status === 422 && data?.message?.errors && setError) {
-    Object.entries(data.message.errors).forEach(([field, msgs]) => {
-      setError(field, {
-        type: 'server',
-        message: (msgs as string[]).join(', ')
-      })
-    })
+  switch (status) {
+    case 401:
+      message = data?.error || "No autenticado, por favor inicia sesión.";
+      break;
+    case 403:
+      message =
+        typeof data?.message === "object"
+          ? data.message.message ||
+            "Acceso restringido, no tienes permisos para realizar esta acción."
+          : (data?.message as string) || "Acceso restringido.";
+      break;
+    case 422:
+      message =
+        typeof data?.message === "object"
+          ? data.message.message || "Existen errores en la información."
+          : (data?.message as string) || "Existen errores en la información.";
+      break;
+    case 500:
+      message =
+        typeof data?.message === "object"
+          ? data.message.error || "Error interno del servidor."
+          : (data?.message as string) || "Error interno del servidor.";
+      break;
   }
 
-  return message
+  return message;
 }

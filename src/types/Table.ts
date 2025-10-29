@@ -30,3 +30,5 @@ export interface RowSpanMessageProps {
   className ?: string
 
 }
+
+export type QueryUpdater = (updates: Partial<QueryStateI>) => void;
