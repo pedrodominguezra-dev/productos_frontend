@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { QueryStateI } from "@/types/Table";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ControlTable } from "./ControlTable";
 import { PaginationTable } from "./PaginationTable";
 import { ProductService } from "@/services/ProductServices/ProductService";
@@ -33,26 +33,26 @@ export const ProductsTable = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Instancia del servicio de productos
-  const productService = ProductService.getInstance();
+  const productService = useMemo(() => ProductService.getInstance(), []);
 
   // Cuando cambie los valores de row per page and
-  const handleChangeControl = (updates: Partial<QueryStateI>) => {
+  const handleChangeControl = useCallback((updates: Partial<QueryStateI>) => {
     setQuery((prev) => ({
       ...prev,
       ...updates,
       page: updates.page ? updates.page : 1,
     }));
-  };
+  }, []);
 
-  const fetchProducs = async () => {
+  const fetchProducs = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
     const response = await productService.getProducts(query);
-    
+
     if (isGetProductsSuccess(response)) {
-      setProducts(response.data.data); 
-      setPaginationData(response.data); 
+      setProducts(response.data.data);
+      setPaginationData(response.data);
     } else {
       setProducts([]);
       setPaginationData(null);
@@ -60,12 +60,11 @@ export const ProductsTable = () => {
     }
 
     setIsLoading(false);
-  };
+  }, [productService, query]);
 
   useEffect(() => {
     fetchProducs();
-  }, [query]);
-
+  }, [fetchProducs, query]);
 
   return (
     <div className="p-4">

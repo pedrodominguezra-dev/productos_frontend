@@ -18,10 +18,17 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parserOptions: {
+				project: ['./tsconfig.node.json', './tsconfig.app.json'],
+				tsconfigRootDir: import.meta.dirname,
+			},
     },
-    ignores: ["src/components/ui/**/*"],
     rules: {
-      "react-hooks/exhaustive-deps": "off",
+      //"react-hooks/exhaustive-deps": "off",
     },
+    ignores: [
+			'src/components/ui/*.tsx', // ignorar los componentes de shadcn
+			'src/components/theme-provider.tsx', // ignorar el theme provider de shadcn
+		],
   },
 ]);

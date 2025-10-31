@@ -13,7 +13,7 @@ export const AppRoute = () => {
   const { checkAuthToken, status } = useAuthStore();
   useEffect(() => {
     checkAuthToken();
-  }, []);
+  }, [checkAuthToken]);
 
   if (status === "checking") {
     return <Loading />;
